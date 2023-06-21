@@ -50,7 +50,48 @@
  */
 
 function formatDate(date, fromFormat, toFormat) {
-  // write code here
+  const [,,,oldSeparator] = fromFormat;
+  const [,,,newSeparator] = toFormat;
+  let newDate = [];
+  // let oldDate = {};
+  let oldDateParts = date.split(oldSeparator);
+
+  // for (let i = 0; i < fromFormat.length - 1; i++) {
+  //   oldDate[fromFormat[i]] = oldDateParts[i];
+  // }
+
+  // for (let i = 0; i < toFormat.length - 1; i++) {
+  //   if (!(toFormat[i] in oldDate) && toFormat[i] === 'YYYY') {
+  //     if (oldDate['YY'] < 30) {
+  //       newDate[i] = `20${oldDate['YY']}`;
+  //     } else {
+  //       newDate[i] = `19${oldDate['YY']}`;
+  //     }
+  //     continue;
+  //   }
+  //   if (!(toFormat[i] in oldDate) && toFormat[i] === 'YY') {
+  //     newDate[i] = oldDate['YYYY'].slice(-2);
+  //     continue;
+  //   }
+
+  //   newDate[i] = oldDate[toFormat[i]];
+  // }
+
+  for (let i = 0; i < toFormat.length - 1; i++) {
+    if (!fromFormat.includes(toFormat[i])) {
+      if (toFormat[i] === 'YYYY') {
+        const oldYear = oldDateParts[fromFormat.indexOf('YY')];
+        newDate[i] = (oldYear < 30) ? `20${oldYear}` : `19${oldYear}`;
+      } else {
+        newDate[i] = oldDateParts[fromFormat.indexOf('YYYY')].slice(-2);
+      }
+      continue;
+    }
+
+    newDate[i] = oldDateParts[fromFormat.indexOf(toFormat[i])];
+  }
+
+  return newDate.join(newSeparator);
 }
 
 module.exports = formatDate;
